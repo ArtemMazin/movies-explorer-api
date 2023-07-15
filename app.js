@@ -7,7 +7,7 @@ const helmet = require('helmet');
 
 const { PORT = 3000 } = process.env;
 const { DB_CONN = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
-const { SECRET_KEY = 'some-secret-key' } = process.env;
+// const { SECRET_KEY = 'some-secret-key' } = process.env;
 
 const app = express();
 
@@ -37,8 +37,6 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 mongoose.connect(DB_CONN);
-
-
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
