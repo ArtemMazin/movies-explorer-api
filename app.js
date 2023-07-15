@@ -4,6 +4,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const { errors } = require('celebrate');
 const router = require('./routes');
 const { PORT, DB_CONN } = require('./configEnv');
 const handleErrors = require('./errors/handleErrors');
@@ -38,6 +39,8 @@ app.use(express.urlencoded({ extended: true }));
 mongoose.connect(DB_CONN);
 
 app.use(router);
+
+app.use(errors());
 
 app.use(handleErrors);
 

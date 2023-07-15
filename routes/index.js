@@ -4,10 +4,11 @@ const movieRoutes = require('./movies');
 const { register, login } = require('../controllers/users');
 const checkAuth = require('../middlewares/auth');
 const NotFoundError = require('../errors/NotFoundError');
+const { loginValidation, registerValidation } = require('../utils/validationConfig');
 
-router.post('/signin', login);
+router.post('/signin', loginValidation, login);
 
-router.post('/signup', register);
+router.post('/signup', registerValidation, register);
 
 router.use(checkAuth);
 
