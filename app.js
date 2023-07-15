@@ -4,6 +4,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const router = require('./routes');
 
 const { PORT = 3000 } = process.env;
 const { DB_CONN = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
@@ -37,6 +38,8 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 mongoose.connect(DB_CONN);
+
+app.use(router);
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console

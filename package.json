@@ -4,8 +4,9 @@
   "description": "backend of the diploma project",
   "main": "app.js",
   "scripts": {
+    "lint": "npx eslint .",
     "start": "node app.js",
-    "dev": "node --watch app.js"
+    "dev": "nodemon app.js"
   },
   "keywords": [],
   "author": "Mazin Artem",
@@ -17,7 +18,9 @@
     "express": "^4.18.2",
     "express-rate-limit": "^6.7.1",
     "helmet": "^7.0.0",
+    "jsonwebtoken": "^9.0.1",
     "mongoose": "^7.3.4",
+    "nodemon": "^3.0.1",
     "validator": "^13.9.0"
   },
   "devDependencies": {
