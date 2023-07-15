@@ -1,6 +1,9 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const { SECRET_KEY } = require('../configEnv');
+const EmailIsExist = require('../errors/EmailIsExist');
+const NotFoundError = require('../errors/NotFoundError');
 
 const register = (req, res, next) => {
   const {
@@ -18,7 +21,7 @@ const register = (req, res, next) => {
       .catch(next)))
     .catch((err) => {
       if (err.code === 11000) {
-        next(new Error('Пользователь с таким email уже существует'));
+        next(new EmailIsExist('Пользователь с таким email уже существует'));
       }
       next(err);
     });
@@ -29,7 +32,7 @@ const login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user._id }, SECRET_KEY, { expiresIn: '7d' });
 
       res
         .cookie('jwt', token, {
@@ -44,7 +47,7 @@ const login = (req, res, next) => {
 
 const getProfile = (req, res, next) => {
   User.findById(req.user._id)
-    .orFail(() => new Error('Пользователь не найден'))
+    .orFail(() => new NotFoundError('Пользователь не найден'))
     .then((user) => res.send({ data: user }))
     .catch(next);
 };

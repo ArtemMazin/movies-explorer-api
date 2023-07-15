@@ -1,8 +1,6 @@
-// import NotFoundError from '../errors/NotFoundError.js';
-// import NotEnoughRights from '../errors/NotEnoughRights.js';
-// import searchAndUpdateCardDB from '../decorators/searchAndUpdateCardDB.js';
-
 const Movie = require('../models/movie');
+const NotFoundError = require('../errors/NotFoundError');
+const NotEnoughRights = require('../errors/NotEnoughRights');
 
 const createMovie = (req, res, next) => {
   const {
@@ -37,14 +35,14 @@ const getMovies = (req, res, next) => {
 
 const deleteMovieById = (req, res, next) => {
   Movie.findById(req.params.movieId)
-    .orFail(() => new Error('Фильм не найден'))
+    .orFail(() => new NotFoundError('Фильм не найден'))
     .then((card) => {
       if (card.owner.toString() === req.user._id) {
         Movie.deleteOne(card)
           .then(() => res.send({ data: card }))
           .catch(next);
       } else {
-        throw new Error('Недостаточно прав для удаления');
+        throw new NotEnoughRights('Недостаточно прав для удаления');
       }
     })
     .catch(next);

@@ -5,10 +5,8 @@ const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const router = require('./routes');
-
-const { PORT = 3000 } = process.env;
-const { DB_CONN = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
-// const { SECRET_KEY = 'some-secret-key' } = process.env;
+const { PORT, DB_CONN } = require('./configEnv');
+const handleErrors = require('./errors/handleErrors');
 
 const app = express();
 
@@ -40,6 +38,8 @@ app.use(express.urlencoded({ extended: true }));
 mongoose.connect(DB_CONN);
 
 app.use(router);
+
+app.use(handleErrors);
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
