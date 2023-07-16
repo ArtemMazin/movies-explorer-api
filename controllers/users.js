@@ -17,11 +17,11 @@ const register = (req, res, next) => {
       email,
       password: hash,
     }).then((user) => res.status(201)
-      .send({ data: user.toJSON() })
-      .catch(next)))
+      .send({ data: user.toJSON() })))
     .catch((err) => {
       if (err.code === 11000) {
         next(new EmailIsExist('Пользователь с таким email уже существует'));
+        return;
       }
       next(err);
     });
