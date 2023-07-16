@@ -8,6 +8,7 @@ const { errors } = require('celebrate');
 const router = require('./routes');
 const { PORT, DB_CONN } = require('./configEnv');
 const handleErrors = require('./errors/handleErrors');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
 
@@ -28,8 +29,7 @@ app.use(cors({
   ],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 }));
-// express-rate-limit ограничивает количество запросов
-app.use(limiter);
+
 // helmet помогает защитить приложения Express, устанавливая заголовки ответа HTTP
 app.use(helmet());
 app.use(express.json());
@@ -38,7 +38,14 @@ app.use(express.urlencoded({ extended: true }));
 
 mongoose.connect(DB_CONN);
 
+app.use(requestLogger);
+
+// express-rate-limit ограничивает количество запросов
+app.use(limiter);
+
 app.use(router);
+
+app.use(errorLogger);
 
 app.use(errors());
 
