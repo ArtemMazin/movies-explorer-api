@@ -5,6 +5,7 @@ const handleErrors = (err, req, res, next) => {
     message: statusCode === 500
       ? 'На сервере произошла ошибка'
       : err.message,
+    status: statusCode,
   });
   next();
 };

@@ -60,7 +60,13 @@ const updateProfile = (req, res, next) => {
     runValidators: true, // данные будут валидированы перед изменением
   })
     .then((user) => res.send({ data: user }))
-    .catch(next);
+    .catch((err) => {
+      if (err.code === 11000) {
+        next(new EmailIsExist('Пользователь с таким email уже существует'));
+        return;
+      }
+      next(err);
+    });
 };
 
 const logout = (req, res) => {
