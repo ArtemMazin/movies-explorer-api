@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config();
 const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -25,6 +26,8 @@ app.use(cors({
   origin: [
     'https://praktikum.tk',
     'http://praktikum.tk',
+    'http://diplom.mazinartem.nomoredomains.xyz',
+    'https://diplom.mazinartem.nomoredomains.xyz',
     'http://localhost:3001',
   ],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
