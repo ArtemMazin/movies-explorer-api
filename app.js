@@ -21,17 +21,20 @@ const limiter = rateLimit({
   message: 'Слишком много запросов с данного IP, повторите попытку позднее',
 });
 
-app.use(cors({
-  credentials: true,
-  origin: [
-    'https://praktikum.tk',
-    'http://praktikum.tk',
-    'http://diplom.mazinartem.nomoredomains.xyz',
-    'https://diplom.mazinartem.nomoredomains.xyz',
-    'http://localhost:3001',
-  ],
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-}));
+app.use(
+  cors({
+    credentials: true,
+    origin: [
+      'https://praktikum.tk',
+      'http://praktikum.tk',
+      'http://diplom.mazinartem.nomoredomains.xyz',
+      'https://diplom.mazinartem.nomoredomains.xyz',
+      'http://localhost:3001',
+      'http://localhost:3000',
+    ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  }),
+);
 
 // helmet помогает защитить приложения Express, устанавливая заголовки ответа HTTP
 app.use(helmet());
