@@ -6,9 +6,7 @@ const EmailIsExist = require('../errors/EmailIsExist');
 const NotFoundError = require('../errors/NotFoundError');
 
 const register = (req, res, next) => {
-  const {
-    name, email, password,
-  } = req.body;
+  const { name, email, password } = req.body;
 
   bcrypt
     .hash(password, 10)
@@ -16,8 +14,7 @@ const register = (req, res, next) => {
       name,
       email,
       password: hash,
-    }).then((user) => res.status(201)
-      .send({ data: user.toJSON() })))
+    }).then((user) => res.status(201).send({ data: user.toJSON() })))
     .catch((err) => {
       if (err.code === 11000) {
         next(new EmailIsExist('Пользователь с таким email уже существует'));
@@ -38,7 +35,8 @@ const login = (req, res, next) => {
         .cookie('jwt', token, {
           maxAge: 3600000 * 24 * 7,
           httpOnly: true,
-          sameSite: true,
+          sameSite: 'none',
+          secure: true,
         })
         .send({ data: user.toJSON() });
     })
@@ -55,10 +53,14 @@ const getProfile = (req, res, next) => {
 const updateProfile = (req, res, next) => {
   const { name, email } = req.body;
 
-  User.findByIdAndUpdate(req.user._id, { name, email }, {
-    new: true, // обработчик then получит на вход обновлённую запись
-    runValidators: true, // данные будут валидированы перед изменением
-  })
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name, email },
+    {
+      new: true, // обработчик then получит на вход обновлённую запись
+      runValidators: true, // данные будут валидированы перед изменением
+    },
+  )
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.code === 11000) {
@@ -70,10 +72,13 @@ const updateProfile = (req, res, next) => {
 };
 
 const logout = (req, res) => {
-  res.clearCookie('jwt')
-    .send({ message: 'Выход' });
+  res.clearCookie('jwt').send({ message: 'Выход' });
 };
 
 module.exports = {
-  register, updateProfile, login, getProfile, logout,
+  register,
+  updateProfile,
+  login,
+  getProfile,
+  logout,
 };
